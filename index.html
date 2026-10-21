@@ -1,5 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<!--nf:start-->
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><!--nf:start-->
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>IYH Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -181,6 +180,30 @@ html.admin.editing .admin-only{display:inline-flex!important}
 .hero-art svg{height:clamp(240px,36vw,440px)}
 @media (prefers-reduced-motion: reduce){.nf-float,.nf-tw,.nf-pole,.nf-lamp{animation:none}}
 @media (prefers-reduced-motion: reduce){.marquee-track,.nf-open,.nf-bar{animation:none}.marquee-track{flex-wrap:wrap;width:auto;row-gap:8px}}
+/* more color */
+html .eyebrow{color:var(--accent)}
+.hero::after{content:"";position:absolute;width:640px;height:640px;right:-220px;top:20px;background:radial-gradient(circle, color-mix(in srgb, #A78BFA 18%, transparent), transparent 65%);pointer-events:none}
+.hero-facts li.fact-hot{background:var(--accent);color:#06121F;border-radius:16px;padding:14px 18px;margin:-10px 0 -6px;box-shadow:0 16px 44px color-mix(in srgb, var(--accent) 40%, transparent);animation:nf-pop 2.8s ease-in-out infinite}
+.hero-facts li.fact-hot span{color:#06121F;font-weight:600;opacity:.85}
+.hero-facts li.fact-hot b{font-size:clamp(2.1rem,4.2vw,3rem);font-weight:700;letter-spacing:-.04em}
+@keyframes nf-pop{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+html:not(.editing) .plan:first-child .price{color:var(--accent)}
+html:not(.editing) .plan:first-child .price::before{content:"Only ";font-size:.42em;font-weight:600;letter-spacing:0;vertical-align:middle;color:var(--fg)}
+.tabs .tabcard:nth-child(1){--c:#4C9EFF}.tabs .tabcard:nth-child(2){--c:#A78BFA}.tabs .tabcard:nth-child(3){--c:#2DD4BF}.tabs .tabcard:nth-child(4){--c:#FBBF24}.tabs .tabcard:nth-child(5){--c:#F472B6}.tabs .tabcard:nth-child(6){--c:#4ADE80}.tabs .tabcard:nth-child(7){--c:#FB923C}
+.tabs .tabcard .tabicon{background:color-mix(in srgb, var(--c) 14%, transparent);border-color:color-mix(in srgb, var(--c) 42%, transparent)}
+.tabs .tabcard .tabicon svg{stroke:var(--c)}
+.tabs .tabcard:hover .tabicon,.tabs .tabcard:focus-visible .tabicon{background:var(--c)!important;border-color:var(--c)!important}
+.tabs .tabcard:hover .tabicon svg,.tabs .tabcard:focus-visible .tabicon svg{stroke:#0A0A0B!important}
+.cards .card:nth-child(1){--c:#4C9EFF}.cards .card:nth-child(2){--c:#4ADE80}.cards .card:nth-child(3){--c:#FBBF24}.cards .card:nth-child(4){--c:#A78BFA}
+.cards .card .cardicon{background:color-mix(in srgb, var(--c) 14%, transparent);border-color:color-mix(in srgb, var(--c) 42%, transparent)}
+.cards .card .cardicon svg{stroke:var(--c)}
+.svc > div:nth-child(1){--c:#4C9EFF}.svc > div:nth-child(2){--c:#F472B6}.svc > div:nth-child(3){--c:#2DD4BF}.svc > div:nth-child(4){--c:#FB923C}
+.svc > div svg{stroke:var(--c)!important}
+.plan.feat{background:var(--accent);border-color:var(--accent);color:#06121F}
+.plan.feat .for{color:#0E2A4A}
+.plan.feat ul{color:#08213D}
+.stats .stat:nth-child(2) .meter span{background:#A78BFA}.stats .stat:nth-child(3) .meter span{background:#F472B6}.stats .stat:nth-child(4) .meter span{background:#2DD4BF}.stats .stat:nth-child(5) .meter span{background:#FBBF24}.stats .stat:nth-child(6) .meter span{background:#4ADE80}
+@media (prefers-reduced-motion: reduce){.hero-facts li.fact-hot{animation:none}}
 /* agency-style home */
 .marquee-band{display:none!important}
 #explore{padding-top:24px!important}
@@ -301,7 +324,8 @@ html.has-bar body{padding-bottom:96px}
 .menubtn{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600;gap:8px;padding:0 18px 0 14px}
 .menubtn[aria-expanded="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
 /* white-forward palette: blue only as a small accent */
-.hero h1 .it,.it{color:var(--fg)}
+.it{color:var(--accent)}
+.hero h1 .it{color:var(--fg)}
 .hero h1 .it{font-family:var(--sans);font-style:normal;font-weight:500;letter-spacing:-.045em}
 .eyebrow{color:var(--muted)}
 .btn.accent{background:var(--fg);border-color:var(--fg);color:var(--bg)}
@@ -416,7 +440,7 @@ html.menu-open,html.menu-open body{overflow:hidden}
         </div>
       </div>
       <ul class="hero-facts" aria-label="At a glance">
-        <li><span>Websites from</span><b id="nf-fact-price">Ask us</b></li>
+        <li class="fact-hot"><span>Websites from only</span><b id="nf-fact-price">Ask us</b></li>
         <li><span>Email reply</span><b>1 day</b></li>
         <li id="nf-fact-rating-li"><span>Client rating</span><b id="nf-fact-rating">5.0</b></li>
       </ul>
@@ -806,6 +830,7 @@ html.menu-open,html.menu-open body{overflow:hidden}
       if (el === document.activeElement) return;
       var k = el.dataset.f, v = val(k);
       if (!editing && !v && el.dataset.fallback) v = el.dataset.fallback;
+      if (!editing && /^price\d/.test(k)) v = fmtPrice(v) || v;
       el.textContent = v;
       if (editing) { el.setAttribute('contenteditable', 'true'); } else { el.removeAttribute('contenteditable'); }
     });
@@ -896,6 +921,7 @@ html.menu-open,html.menu-open body{overflow:hidden}
     (editing ? '<div style="margin-top:24px"><button type="button" class="addbtn" data-act="add-project">+ Add a project</button></div>' : '');
   }
 
+  function fmtPrice(v){ v = String(v || '').trim(); var m = v.match(/^\$?\s*([\d][\d,.]*)\s*\$?$/); return m ? '$' + m[1] : v; }
   function renderHeroWork(){
     var box = $('#nf-herowork'); if (!box) return;
     var p = (draft.gallery || []).filter(function(g){ return g.img || (g.name || '').trim(); })[0];
@@ -907,7 +933,7 @@ html.menu-open,html.menu-open body{overflow:hidden}
       '<div class="hw-meta"><b>' + esc(p && p.name ? p.name : 'Recent launches') + '</b><span>' + esc(desc) + '</span></div></a>';
     if (r) html += '<figure class="hw-review"><div class="stars" role="img" aria-label="' + (r.stars || 5) + ' out of 5 stars">' + starText(r.stars) + '</div><blockquote>“' + esc(r.text.length > 120 ? r.text.slice(0, 118).trim() + '…' : r.text) + '”</blockquote><figcaption>' + esc(r.name) + (r.shop ? ', ' + esc(r.shop) : '') + '</figcaption></figure>';
     box.innerHTML = html;
-    var fp = $('#nf-fact-price'); if (fp) fp.textContent = val('price1') || 'Ask us';
+    var fp = $('#nf-fact-price'); if (fp) fp.textContent = fmtPrice(val('price1')) || 'Ask us';
     var li = $('#nf-fact-rating-li'), fr = $('#nf-fact-rating');
     if (li && fr) {
       if (!revs.length) { li.hidden = true; }
@@ -1291,5 +1317,4 @@ html.menu-open,html.menu-open body{overflow:hidden}
     }, function(){});
   }
 })();
-</script>
-</body></html>
+</script></body></html>
