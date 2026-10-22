@@ -354,6 +354,7 @@ html.pop-open,html.pop-open body{overflow:hidden}
     <div class="fields">
       <label class="fld" for="set-brand">Business name<input id="set-brand" data-set="brand" type="text" placeholder="IYH Studio"></label>
       <label class="fld" for="set-email">Email where messages go<input id="set-email" data-set="email" type="email" placeholder="you@yourbusiness.com"></label>
+      <label class="fld" for="set-web3">Web3Forms access key (for instant emails)<input id="set-web3" data-set="web3_key" type="text" autocomplete="off" placeholder="Paste the key from web3forms.com"></label>
     </div>
     <div>
       <div class="label" style="margin-bottom:10px">Main color</div>
@@ -1103,8 +1104,17 @@ html.pop-open,html.pop-open body{overflow:hidden}
     var fallback = function(){ done(); showOut(box, text); openMail(text, subject); };
     if (!window.fetch) { fallback(); return; }
     var ctl = window.AbortController ? new AbortController() : null;
-    var timer = setTimeout(function(){ if (ctl) ctl.abort(); }, 15000);
-    fetch('https://formsubmit.co/ajax/' + encodeURIComponent(val('email')), { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form), signal: ctl ? ctl.signal : undefined })
+    var timer = setTimeout(function(){ if (ctl) ctl.abort(); }, 8000);
+    var key = val('web3_key'), fd = new FormData(form), req;
+    if (key) {
+      var o = { access_key: key, subject: subject, from_name: (val('brand') || 'IYH Studio') + ' website', message: text };
+      fd.forEach(function(v, k){ if (k.charAt(0) !== '_' && !(k in o)) o[k] = v; });
+      if (o.email) o.replyto = o.email;
+      req = fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(o), signal: ctl ? ctl.signal : undefined });
+    } else {
+      req = fetch('https://formsubmit.co/ajax/' + encodeURIComponent(val('email')), { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd, signal: ctl ? ctl.signal : undefined });
+    }
+    req
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return r.ok && String(j.success) !== 'false'; }); })
       .then(function(ok){
         clearTimeout(timer);
