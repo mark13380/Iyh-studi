@@ -325,6 +325,8 @@ html.admin.editing .admin-only{display:inline-flex!important}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 .hero h1 [data-f="headline_accent"]{font-style:italic;font-weight:400}
+.showcase .float-review{position:relative;right:auto;bottom:auto;margin:0 auto;width:min(620px,100%);padding:36px 40px;text-align:center;align-items:center}
+.showcase .float-review blockquote{font-size:clamp(22px,2.6vw,28px)}
 </style>
 
 <div class="edit-panel edit-only" id="nf-panel">
@@ -425,7 +427,7 @@ html.admin.editing .admin-only{display:inline-flex!important}
     </div>
   </section>
 
-  <section class="sec light" id="homework" data-home>
+  <section class="sec light" id="homework" data-off>
     <div class="wrap">
       <div class="sec-head">
         <div><p class="kicker">Selected work</p><h2 class="h2">Recent launches</h2></div>
@@ -829,7 +831,7 @@ html.admin.editing .admin-only{display:inline-flex!important}
     var p = list.filter(function(g){ return g.img; })[0] || list[0];
     var revs = (draft.reviews || []).filter(function(x){ return (x.text || '').trim(); });
     var r = revs[0];
-    var html = '<a class="frame" href="#work" aria-label="See recent launches"><div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>' + esc(p && p.name ? p.name : 'Your next website') + '</span></div>' +
+    var html = '';
       '<div class="frame-img">' + (p && p.img ? '<img src="' + esc(p.img) + '" alt="' + esc(p.name || 'Project') + ' website">' : '<div class="frame-empty">Your project here</div>') + '</div></a>';
     if (r) html += '<figure class="float-review"><div class="stars" role="img" aria-label="' + (r.stars || 5) + ' out of 5 stars">' + starText(r.stars) + '</div><blockquote>“' + esc(trunc(r.text, 130)) + '”</blockquote><figcaption><b>' + esc(r.name) + '</b>' + (r.shop ? ' · ' + esc(r.shop) : '') + '</figcaption></figure>';
     box.innerHTML = html;
