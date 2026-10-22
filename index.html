@@ -241,6 +241,14 @@ form.f{display:flex;flex-direction:column;gap:18px}
 .outbox .label{font-size:13px;color:var(--muted)}
 .outbox pre{margin:0;white-space:pre-wrap;font:400 15px/1.55 var(--sans);color:var(--soft);user-select:all}
 
+/* plan shortcuts */
+a.offer{text-decoration:none;color:var(--fg);cursor:pointer;transition:border-color .2s,background .2s}
+a.offer:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 15%, transparent)}
+.offer-go{font-size:20px;color:var(--accent);transition:transform .2s}
+a.offer:hover .offer-go{transform:translateX(4px)}
+html:not(.editing) .price-wrap[data-plan]{cursor:pointer}
+html:not(.editing) .price-wrap[data-plan]:hover .price{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:8px}
+.ready-note{margin:0;padding:14px 16px;border-radius:12px;border:1px solid color-mix(in srgb, var(--accent) 50%, transparent);background:color-mix(in srgb, var(--accent) 10%, transparent);color:var(--fg);font-size:15px}
 /* work page */
 .page-top{padding-top:88px}
 .h1-page{margin:0;font-size:clamp(2.8rem,7vw,5.4rem);line-height:.98;letter-spacing:-.05em;font-weight:600}
@@ -384,7 +392,7 @@ html.admin.editing .admin-only{display:inline-flex!important}
         </div>
       </div>
       <div class="hero-meta">
-        <div class="offer"><span class="offer-pre">Websites from only</span><b id="nf-fact-price">Ask us</b><span class="offer-note">Fixed price, agreed up front</span></div>
+        <a class="offer" href="#contact" data-plan="Starter"><span class="offer-pre">Websites from only</span><b id="nf-fact-price">Ask us</b><span class="offer-note">Fixed price, agreed up front</span><span class="offer-go" aria-hidden="true">→</span></a>
         <ul class="hero-points" aria-label="Every site comes with">
           <li>Looks great on every phone</li>
           <li>Shows up on Google Maps</li>
@@ -493,21 +501,21 @@ html.admin.editing .admin-only{display:inline-flex!important}
         <div class="plan hot">
           <span class="ribbon">Best way to start</span>
           <div><h3>Starter</h3><p class="for">For a business’s first real website.</p></div>
-          <div class="price-wrap"><span class="price-pre">Only</span><span class="price" data-f="price1" data-ph="Your price" data-fallback="Ask us"></span></div>
+          <div class="price-wrap" data-plan="Starter"><span class="price-pre">Only</span><span class="price" data-f="price1" data-ph="Your price" data-fallback="Ask us"></span></div>
           <ul><li>Up to 5 pages</li><li>Custom design</li><li>Works on every phone</li><li>Google Maps listing</li></ul>
-          <a class="btn accent lg" href="#contact">Get started</a>
+          <a class="btn accent lg" href="#contact" data-plan="Starter">Get started</a>
         </div>
         <div class="plan">
           <div><div class="plan-top"><h3>Growth</h3><span class="tag-sm">Most popular</span></div><p class="for">For businesses ready to bring in more local customers.</p></div>
-          <div class="price-wrap"><span class="price" data-f="price2" data-ph="Your price" data-fallback="Ask us"></span></div>
+          <div class="price-wrap" data-plan="Growth"><span class="price" data-f="price2" data-ph="Your price" data-fallback="Ask us"></span></div>
           <ul><li>Up to 10 pages</li><li>Logo &amp; look refresh</li><li>Easy for you to update</li><li>Google Business profile setup</li></ul>
-          <a class="btn lg" href="#contact">Get started</a>
+          <a class="btn lg" href="#contact" data-plan="Growth">Get started</a>
         </div>
         <div class="plan">
           <div><h3>Custom</h3><p class="for">For businesses that need a little something extra.</p></div>
-          <div class="price-wrap"><span class="price" data-f="price3" data-ph="Your price" data-fallback="Let’s talk"></span></div>
+          <div class="price-wrap" data-plan="Custom"><span class="price" data-f="price3" data-ph="Your price" data-fallback="Let’s talk"></span></div>
           <ul><li>Online booking or menus</li><li>Photo gallery</li><li>One person you can always reach</li><li>Monthly care plan</li></ul>
-          <a class="btn lg" href="#contact">Get a quote</a>
+          <a class="btn lg" href="#contact" data-plan="Custom">Get a quote</a>
         </div>
       </div>
     </div>
@@ -576,6 +584,7 @@ html.admin.editing .admin-only{display:inline-flex!important}
         <p class="muted" data-f="contact_blurb" data-ph="A friendly line inviting people to email you"></p>
       </div>
       <form class="f" id="nf-contact-form"><input type="hidden" name="_subject" value="New message from your website"><input type="hidden" name="_template" value="table">
+        <p class="ready-note" id="ct-note" aria-live="polite" hidden></p>
         <div class="fields">
           <label class="fld" for="ct-name">Name<input id="ct-name" name="name" type="text" required placeholder="Jane Smith"></label>
           <label class="fld" for="ct-reach">Your email<input id="ct-reach" name="email" type="email" required placeholder="jane@company.com"></label>
@@ -1051,7 +1060,7 @@ html.admin.editing .admin-only{display:inline-flex!important}
     e.preventDefault();
     var text = 'Hi ' + (val('brand') || 'Northform') + ',\n\n' + ($('#ct-msg').value.trim() || 'I’d like to talk about a website for my business.') + '\n\nPackage: ' + $('#ct-plan').value + '\nName: ' + $('#ct-name').value.trim() + '\nMy email: ' + $('#ct-reach').value.trim();
     showOut($('#ct-out'), text);
-    openMail(text, 'New project inquiry');
+    openMail(text, ($('#nf-contact-form input[name="_subject"]') || {}).value || 'New project inquiry');
   });
 
   /* ---------- live-site admin (Firebase) ---------- */
@@ -1187,6 +1196,24 @@ html.admin.editing .admin-only{display:inline-flex!important}
       saved = norm(st); draft = JSON.parse(JSON.stringify(saved)); renderAll();
     });
   }
+
+  /* ---------- plan shortcuts: tap a price, get a ready-written email ---------- */
+  var PLAN_PRICE = { Starter: 'price1', Growth: 'price2', Custom: 'price3' };
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('[data-plan]') : null;
+    if (!a) return;
+    if (editing && a.classList.contains('price-wrap')) return;
+    var plan = a.getAttribute('data-plan');
+    var pr = fmtPrice(val(PLAN_PRICE[plan] || ''));
+    var hasPrice = /\d/.test(pr);
+    var sel = $('#ct-plan'), msg = $('#ct-msg'), note = $('#ct-note'), subj = $('#nf-contact-form input[name="_subject"]');
+    if (sel) sel.value = plan;
+    if (msg) msg.value = 'Hi, I’m interested in the ' + plan + ' website' + (hasPrice ? ' (' + pr + ')' : '') + '. Please let me know the exact details.';
+    if (subj) subj.value = 'New ' + plan + ' website inquiry';
+    if (note) { note.hidden = false; note.textContent = 'Your message about the ' + plan + ' website' + (hasPrice ? ' (' + pr + ')' : '') + ' is ready. Add your name and email, then tap Send email.'; }
+    if (a.tagName !== 'A') { if (location.hash === '#contact') route(); else location.hash = '#contact'; }
+    setTimeout(function(){ var n = $('#ct-name'); if (n) { try { n.focus({ preventScroll: true }); } catch (x) { n.focus(); } } }, 80);
+  });
 
   /* ---------- start ---------- */
   if (STANDALONE) document.documentElement.classList.add('standalone');
