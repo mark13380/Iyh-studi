@@ -1086,7 +1086,7 @@ html.pop-open,html.pop-open body{overflow:hidden}
     var to = val('email');
     box.hidden = false;
     box.innerHTML = '<div class="label">Your email is ready' + (to ? ' · To: ' + esc(to) : '') + '</div><pre>' + esc(text) + '</pre>' +
-      '<p style="margin:0;font-size:15px;color:#C9C9CE">' + (to ? 'Your email app should open with this message ready to send. If it didn’t, tap Open email app or copy the message.' : 'Copy it and send it to us.') + '</p>' +
+      '<p style="margin:0;font-size:15px;color:var(--muted)">' + (to ? 'Your email app should open with this message ready to send. If it didn’t, tap Open email app or copy the message.' : 'Copy it and send it to us.') + '</p>' +
       '<div class="btnrow"><button type="button" class="btn small solid" data-copy>Copy message</button>' +
       (to ? '<a class="btn small" href="mailto:' + esc(to) + '?subject=' + encodeURIComponent('Message from your website') + '&amp;body=' + encodeURIComponent(text) + '">Open email app</a>' : '') + '</div>';
     var btn = box.querySelector('[data-copy]');
@@ -1096,20 +1096,40 @@ html.pop-open,html.pop-open body{overflow:hidden}
       try { navigator.clipboard.writeText(text).then(function(){ btn.textContent = 'Copied'; }, selectIt); } catch (x) { selectIt(); }
     });
   }
+  function sendOnline(form, box, text, subject){
+    var btn = form.querySelector('button[type="submit"]'), label = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    var done = function(){ if (btn) { btn.disabled = false; btn.innerHTML = label; } };
+    var fallback = function(){ done(); showOut(box, text); openMail(text, subject); };
+    if (!window.fetch) { fallback(); return; }
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function(){ if (ctl) ctl.abort(); }, 15000);
+    fetch('https://formsubmit.co/ajax/' + encodeURIComponent(val('email')), { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form), signal: ctl ? ctl.signal : undefined })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return r.ok && String(j.success) !== 'false'; }); })
+      .then(function(ok){
+        clearTimeout(timer);
+        if (!ok) { fallback(); return; }
+        done(); form.reset();
+        box.hidden = false;
+        box.innerHTML = '<div class="label">Sent</div><p style="margin:0;font-size:16px">Thank you! Your message is on its way. We’ll reply by email within one business day.</p>';
+      }, function(){ clearTimeout(timer); fallback(); });
+  }
   $('#nf-review-form').addEventListener('submit', function(e){
-    if (STANDALONE && val('email')) return;
     e.preventDefault();
     var n = $('#rv-stars').value;
     var text = 'Review for ' + (val('brand') || 'Northform') + '\n' + starText(+n) + ' (' + n + ' stars)\n\n“' + $('#rv-text').value.trim() + '”\n\n— ' + $('#rv-name').value.trim() + ($('#rv-shop').value.trim() ? ', ' + $('#rv-shop').value.trim() : '');
+    var subj = 'New review for ' + (val('brand') || 'IYH Studio');
+    if (STANDALONE && val('email')) { sendOnline(this, $('#rv-out'), text, subj); return; }
     showOut($('#rv-out'), text);
-    openMail(text, 'New review for ' + (val('brand') || 'IYH Studio'));
+    openMail(text, subj);
   });
   $('#nf-contact-form').addEventListener('submit', function(e){
-    if (STANDALONE && val('email')) return;
     e.preventDefault();
     var text = 'Hi ' + (val('brand') || 'Northform') + ',\n\n' + ($('#ct-msg').value.trim() || 'I’d like to talk about a website for my business.') + '\n\nPackage: ' + $('#ct-plan').value + '\nName: ' + $('#ct-name').value.trim() + '\nMy email: ' + $('#ct-reach').value.trim();
+    var subj = ($('#nf-contact-form input[name="_subject"]') || {}).value || 'New project inquiry';
+    if (STANDALONE && val('email')) { sendOnline(this, $('#ct-out'), text, subj); return; }
     showOut($('#ct-out'), text);
-    openMail(text, ($('#nf-contact-form input[name="_subject"]') || {}).value || 'New project inquiry');
+    openMail(text, subj);
   });
 
   /* ---------- live-site admin (Firebase) ---------- */
@@ -1268,7 +1288,7 @@ html.pop-open,html.pop-open body{overflow:hidden}
   if (STANDALONE) document.documentElement.classList.add('standalone');
   // On its own web address, the forms send straight to the owner's inbox.
   if (STANDALONE && val('email')) {
-    ['#nf-review-form', '#nf-contact-form'].forEach(function(s){ var fm = $(s); fm.action = 'https://formsubmit.co/' + encodeURIComponent(val('email')); fm.method = 'POST'; });
+    ['#nf-review-form', '#nf-contact-form'].forEach(function(s){ var fm = $(s); fm.removeAttribute('action'); });
     $('#nf-review-form button[type=submit]').textContent = 'Send review';
     var cb = $('#nf-contact-form button[type=submit]'); if (cb.firstChild) cb.firstChild.nodeValue = 'Send message ';
   }
