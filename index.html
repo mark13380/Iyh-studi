@@ -345,6 +345,24 @@ html.admin.editing .admin-only{display:inline-flex!important}
 @keyframes popfade{from{opacity:0}to{opacity:1}}
 @keyframes poprise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 html.pop-open,html.pop-open body{overflow:hidden}
+.claim{margin-top:32px;display:flex;flex-direction:column;gap:20px}
+.claim-deal{padding:28px;border-radius:4px;background:var(--espresso);color:var(--cream);display:flex;flex-direction:column;gap:12px}
+.claim-deal .pop-kicker{color:var(--accent)}
+.claim-price{display:flex;align-items:baseline;gap:14px}
+.claim-price b{font-family:var(--serif);font-size:60px;line-height:1;font-weight:600;color:var(--accent)}
+.claim-price span{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#DDD3C6}
+.claim-big{margin:0;font-family:var(--serif);font-size:28px;font-weight:500;line-height:1.15}
+.claim-deal .pop-list{color:#DDD3C6}
+.claim-deal .pop-list li::before{color:var(--accent)}
+.claim-why{padding:28px;border-radius:4px;border:1px solid var(--line-2);display:flex;flex-direction:column;gap:16px}
+.claim-why h3{margin:0;font-family:var(--serif);font-size:28px;font-weight:500}
+.why-item{display:flex;gap:16px;align-items:baseline}
+.why-item b{flex:none;min-width:72px;font-family:var(--serif);font-size:32px;font-weight:600;color:var(--accent-ink);line-height:1}
+.why-item p{margin:0;font-size:15px;color:var(--soft)}
+.claim-src{margin:0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.project{--fg:#F4EEE6;--soft:#DDD3C6;--muted:#C2B5A6;--dim:#A39585;--line:rgba(244,238,230,.14);--line-2:rgba(244,238,230,.28);--accent-ink:var(--accent);--surface:#1C1612;--surface-2:#241C16;background:#1C1612;color:var(--fg);box-shadow:0 30px 60px -36px rgba(17,13,10,.55)}
+.project .tile{background:#241C16}
+.project .btn{color:var(--fg)}
 </style>
 
 <div class="edit-panel edit-only" id="nf-panel">
